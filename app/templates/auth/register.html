@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Create Account — Pulse Notes{% endblock %}
+
+{% block content %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding: 24px;">
+
+    <!-- Background grain -->
+    <div style="position:fixed; inset:0; opacity:0.03; background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); pointer-events:none;"></div>
+
+    <div style="width:100%; max-width:420px;">
+
+        <!-- Logo -->
+        <div class="fade-up" style="text-align:center; margin-bottom:40px;">
+            <div style="display:inline-flex; align-items:center; gap:10px; margin-bottom:8px;">
+                <div style="width:32px; height:32px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0d0f14" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <span class="serif" style="font-size:22px; color:var(--text-primary);">Pulse Notes</span>
+            </div>
+            <p style="color:var(--text-muted); font-size:13px;">Your thoughts, always in sync.</p>
+        </div>
+
+        <!-- Card -->
+        <div class="card fade-up-delay" style="padding:32px;">
+            <h1 style="font-size:20px; font-weight:500; margin-bottom:4px;">Create your account</h1>
+            <p style="color:var(--text-muted); font-size:13px; margin-bottom:24px;">Start capturing and collaborating.</p>
+
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}" style="margin-bottom:16px;">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <!-- Form -->
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div style="display:flex; flex-direction:column; gap:16px;">
+
+                    <div>
+                        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Username</label>
+                        <input type="text" name="username" class="input-field" placeholder="auwal" required>
+                    </div>
+
+                    <div>
+                        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Email</label>
+                        <input type="email" name="email" class="input-field" placeholder="you@email.com" required>
+                    </div>
+
+                    <div>
+                        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Password</label>
+                        <input type="password" name="password" class="input-field" placeholder="Min. 6 characters" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="margin-top:8px;">
+                        Create Account
+                    </button>
+
+                </div>
+            </form>
+        </div>
+
+        <!-- Login link -->
+        <p class="fade-up-delay-2" style="text-align:center; margin-top:20px; font-size:13px; color:var(--text-muted);">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}" style="color:var(--accent); text-decoration:none; font-weight:500;"> Sign in</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}

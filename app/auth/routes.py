@@ -17,7 +17,7 @@ def register():
 
         # Check if user already exists
         existing_user = db.session.execute(
-            db.session.select(User).where(User.email==email)
+            db.select(User).where(User.email==email)
             ).scalar_one_or_none()
         
         if existing_user: 

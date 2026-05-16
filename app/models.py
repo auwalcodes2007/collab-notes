@@ -47,7 +47,7 @@ class Tag(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
-    notes: Mapped[list["Note"]] = relationship("Notes", secondary=note_tags, back_populates="tags")
+    notes: Mapped[list["Note"]] = relationship("Note", secondary=note_tags, back_populates="tags")
 
 
     
