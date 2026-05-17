@@ -1,14 +1,16 @@
 from flask import render_template, redirect, url_for, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app.notes import notes_bp
+from ..extensions import db
+from ..models import Note
 
 
-# TODO: GET all notes 
 @notes_bp.route('/dashboard')
 @login_required
 def dashboard():
-    # Query database to get all notes
-    notes = ''
+    notes = db.session.execute(
+        db.select(Note).where(Note.user_id == current_user.id)
+        ).scalars().all()
     return render_template('notes/dashboard.html', notes=notes)
 
 # TODO: Get create/ to create notes AND Post create/ to submit created note
