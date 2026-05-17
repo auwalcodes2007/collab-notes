@@ -4,7 +4,6 @@
 {% block content %}
 <div style="min-height:100vh;">
 
-    <!-- Nav -->
     <nav style="border-bottom:1px solid var(--border); padding:16px 32px; display:flex; align-items:center; justify-content:space-between;">
         <div style="display:flex; align-items:center; gap:10px;">
             <div style="width:28px; height:28px; background:var(--accent); border-radius:6px; display:flex; align-items:center; justify-content:center;">
@@ -18,14 +17,55 @@
         </div>
     </nav>
 
-    <!-- Main -->
     <main style="max-width:900px; margin:0 auto; padding:48px 24px;">
 
-        <div class="fade-up" style="margin-bottom:40px;">
-            <h1 class="serif" style="font-size:36px; margin-bottom:8px;">Good to see you, <span class="accent">{{ current_user.username | capitalize }}</span>.</h1>
-            <p style="color:var(--text-muted); font-size:15px;">Your workspace is ready. Start writing.</p>
+        <!-- Header -->
+        <div class="fade-up" style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:40px;">
+            <div>
+                <h1 class="serif" style="font-size:36px; margin-bottom:6px;">Good to see you, <span class="accent">{{ current_user.username | capitalize }}</span>.</h1>
+                <p style="color:var(--text-muted); font-size:14px;">{{ notes|length }} note{{ 's' if notes|length != 1 else '' }} in your workspace.</p>
+            </div>
+            <a href="{{ url_for('notes.create_note') }}" class="btn-primary" style="width:auto; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                + New Note
+            </a>
         </div>
 
+        <!-- Notes grid or empty state -->
+        {% if notes %}
+        <div class="fade-up-delay" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+            {% for note in notes %}
+            <div class="card" style="padding:24px; display:flex; flex-direction:column; gap:16px; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+
+                <!-- Note content -->
+                <div style="flex:1;">
+                    <h3 style="font-size:16px; font-weight:500; margin-bottom:8px; line-height:1.4;">{{ note.title }}</h3>
+                    <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">
+                        {{ note.content[:120] + '...' if note.content and note.content|length > 120 else note.content or 'No content.' }}
+                    </p>
+                </div>
+
+                <!-- Timestamp -->
+                <p style="font-size:11px; color:var(--text-muted);">
+                    {{ note.updated_at.strftime('%b %d, %Y') }}
+                </p>
+
+                <!-- Actions -->
+                <div style="display:flex; gap:8px; padding-top:12px; border-top:1px solid var(--border);">
+                    <a href="{{ url_for('notes.edit_note', id=note.id) }}" style="flex:1; padding:8px; text-align:center; font-size:12px; color:var(--text-muted); text-decoration:none; border:1px solid var(--border); border-radius:6px; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-muted)'">
+                        Edit
+                    </a>
+                    <form method="POST" action="{{ url_for('notes.delete_note', id=note.id) }}" style="flex:1;" onsubmit="return confirm('Delete this note?')">
+                        <button type="submit" style="width:100%; padding:8px; font-size:12px; color:#fca5a5; background:transparent; border:1px solid var(--border); border-radius:6px; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='#7f1d1d'; this.style.background='#2d1515'" onmouseout="this.style.borderColor='var(--border)'; this.style.background='transparent'">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
         <!-- Empty state -->
         <div class="card fade-up-delay" style="padding:64px; text-align:center;">
             <div style="width:48px; height:48px; background:var(--accent-dim); border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
@@ -33,10 +73,11 @@
             </div>
             <h2 style="font-size:18px; font-weight:500; margin-bottom:8px;">No notes yet</h2>
             <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Create your first note and it'll appear here.</p>
-            <button class="btn-primary" style="width:auto; padding:10px 32px;">
+            <a href="{{ url_for('notes.create_note') }}" class="btn-primary" style="width:auto; text-decoration:none; display:inline-flex; align-items:center; gap:8px; margin:0 auto;">
                 + New Note
-            </button>
+            </a>
         </div>
+        {% endif %}
 
     </main>
 </div>
