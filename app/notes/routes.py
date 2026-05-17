@@ -47,10 +47,17 @@ def edit_note(id):
     
     return render_template("notes/edit.html", note=note)
 
-# TODO: Get delete/ with note id to delete note
+
 @notes_bp.route('/delete/<int:id>', methods=["POST"])
 @login_required
 def delete_note(id):
-    # Query database for note to delete using id
-    note = ''
+    note = db.session.get(Note, id)
+    if not note or note.user_id != current_user.id:
+        flash("Note not found.", "error")
+        return redirect(url_for('notes.dashboard'))
+    
+    db.session.delete(note)
+    db.session.commit()
+
+    flash("Note deleted.", "success")
     return redirect(url_for('notes.dashboard'))
