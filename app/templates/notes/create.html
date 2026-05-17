@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}New Note — Pulse Notes{% endblock %}
+
+{% block content %}
+<div style="min-height:100vh;">
+
+    <!-- Nav -->
+    <nav style="border-bottom:1px solid var(--border); padding:16px 32px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; background:var(--accent); border-radius:6px; display:flex; align-items:center; justify-content:center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d0f14" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <span class="serif" style="font-size:18px;">Pulse Notes</span>
+        </div>
+        <a href="{{ url_for('notes.dashboard') }}" style="font-size:13px; color:var(--text-muted); text-decoration:none;">← Back to dashboard</a>
+    </nav>
+
+    <main style="max-width:720px; margin:0 auto; padding:48px 24px;">
+
+        <div class="fade-up" style="margin-bottom:32px;">
+            <h1 class="serif" style="font-size:32px; margin-bottom:8px;">New Note</h1>
+            <p style="color:var(--text-muted); font-size:14px;">Capture your thought.</p>
+        </div>
+
+        <div class="card faddashboarde-up-delay" style="padding:32px;">
+            <form method="POST" action="{{ url_for('notes.create_note') }}">
+                <div style="display:flex; flex-direction:column; gap:20px;">
+
+                    <div>
+                        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Title</label>
+                        <input type="text" name="title" class="input-field" placeholder="Give your note a title..." required>
+                    </div>
+
+                    <div>
+                        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Content</label>
+                        <textarea name="content" class="input-field" placeholder="Start writing..." rows="12" style="resize:vertical; line-height:1.6;"></textarea>
+                    </div>
+
+                    <div style="display:flex; gap:12px; justify-content:flex-end;">
+                        <a href="{{ url_for('notes.dashboard') }}" style="padding:10px 24px; border:1px solid var(--border); border-radius:8px; font-size:14px; color:var(--text-muted); text-decoration:none; display:inline-flex; align-items:center;">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn-primary" style="width:auto;">
+                            Save Note
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </main>
+</div>
+{% endblock %}
