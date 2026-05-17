@@ -13,7 +13,7 @@
             <span class="serif" style="font-size:18px;">Pulse Notes</span>
         </div>
         <div style="display:flex; align-items:center; gap:16px;">
-            <span style="font-size:13px; color:var(--text-muted);">{{ current_user.username }}</span>
+            <span style="font-size:13px; color:var(--text-muted);">{{ current_user.username | capitalize }}</span>
             <a href="{{ url_for('auth.logout') }}" style="font-size:13px; color:var(--accent); text-decoration:none;">Sign out</a>
         </div>
     </nav>
@@ -22,7 +22,7 @@
     <main style="max-width:900px; margin:0 auto; padding:48px 24px;">
 
         <div class="fade-up" style="margin-bottom:40px;">
-            <h1 class="serif" style="font-size:36px; margin-bottom:8px;">Good to see you, <span class="accent">{{ current_user.username }}</span>.</h1>
+            <h1 class="serif" style="font-size:36px; margin-bottom:8px;">Good to see you, <span class="accent">{{ current_user.username | capitalize }}</span>.</h1>
             <p style="color:var(--text-muted); font-size:15px;">Your workspace is ready. Start writing.</p>
         </div>
 
