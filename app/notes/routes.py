@@ -31,8 +31,20 @@ def create_note():
 @notes_bp.route('/edit/<int:id>', methods=["GET", "POST"])
 @login_required
 def edit_note(id):
-    # Query database for note to edit using id
-    note = ''
+    note = db.session.get(Note, id)
+
+    if not note or note.user_id != current_user.id:
+        flash("Note not found.", "error")
+        return redirect(url_for('notes.dashboard'))
+    
+    if request.method == "POST":
+        note.title = request.form.get('title')
+        note.content = request.form.get('content')
+        db.session.add(note)
+        db.session.commit()
+        flash("Note updated.", "success")
+        return redirect(url_for('notes.dashboard'))
+    
     return render_template("notes/edit.html", note=note)
 
 # TODO: Get delete/ with note id to delete note
