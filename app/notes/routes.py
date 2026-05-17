@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from app.notes import notes_bp
 from ..extensions import db
@@ -13,16 +13,21 @@ def dashboard():
         ).scalars().all()
     return render_template('notes/dashboard.html', notes=notes)
 
-# TODO: Get create/ to create notes AND Post create/ to submit created note
+
 @notes_bp.route('/create', methods=["GET", "POST"])
 @login_required
 def create_note():
     if request.method == "POST":
-        # Create note here and add to db
+        title = request.form.get('title')
+        content = request.form.get('content')
+        new_note = Note(title=title, content=content, user_id=current_user.id)
+        db.session.add(new_note)
+        db.session.commit()
+        flash('Note created.', 'success')
         return redirect(url_for('notes.dashboard'))
     return render_template("notes/create.html")
 
-# TODO: Get edit/ with note id to edit notes AND Post edit/ to submit editted note
+
 @notes_bp.route('/edit/<int:id>', methods=["GET", "POST"])
 @login_required
 def edit_note(id):
